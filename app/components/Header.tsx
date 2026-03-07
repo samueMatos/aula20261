@@ -1,6 +1,11 @@
 'use client';
 
+import { useAuth } from "../context/AuthContext";
+
 export default function Header(){
+
+  const{usuario,logout} = useAuth();
+
   return (
     <header className="w-full bg-white border-b border-zinc-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -25,13 +30,14 @@ export default function Header(){
               </svg>
             </div>
             <span className="text-sm font-semibold text-zinc-800 hidden sm:block">
-              Samuel Matos
+              {usuario?.nome.toLocaleUpperCase()||'Usuario indefinido!'}
             </span>
           </div>
 
           {/* Botão Sair */}
           <button 
             type="button"
+            onClick={logout}
             className="group flex items-center gap-2 px-4 py-2 text-sm font-medium text-zinc-600 transition-all rounded-lg hover:bg-zinc-50 hover:text-red-600 border border-transparent hover:border-zinc-200"
             
           >
