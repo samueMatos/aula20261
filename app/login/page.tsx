@@ -16,7 +16,7 @@ export default function LoginPage() {
         try{
         //Validamos na API
 
-            const usuarioMock = new Usuario(1,"Professor Samuel Matos");
+            const usuarioMock = new Usuario(1,"Professor Samuel Matos","",true);
             const tokenMock = "jwt-siajdoaasdda-adssknasld455"
             
             login(usuarioMock,tokenMock);
