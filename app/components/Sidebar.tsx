@@ -21,6 +21,12 @@ export default function Sidebar() {
                 >
                     <span className="font-medium">Usuários</span>
                 </Link>
+                 <Link
+                    href="/clientes"
+                    className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 transition-colors duration-200 text-slate-300 hover:text-white group"
+                >
+                    <span className="font-medium">Cliente</span>
+                </Link>
             </nav>
         </aside>
     );
