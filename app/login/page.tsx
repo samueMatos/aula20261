@@ -2,6 +2,11 @@
 
 import { useRouter } from "next/navigation";
 import { useAuth, Usuario } from "../context/AuthContext";
+import axios from "axios";
+
+interface LoginResponse{
+    token: string
+}
 
 export default function LoginPage() {
     const router = useRouter();
@@ -14,12 +19,28 @@ export default function LoginPage() {
         const senha = formData.get("senha");
 
         try{
-        //Validamos na API
-
-            const usuarioMock = new Usuario(1,"Professor Samuel Matos","",true);
-            const tokenMock = "jwt-siajdoaasdda-adssknasld455"
             
-            login(usuarioMock,tokenMock);
+            debugger;
+            // var loginResult = await fetch("http://localhost:8080/auth/login",{
+            //     method :'POST',
+            //     headers:{
+            //         'Content-Type':'application/json'
+            //     },
+            //     body: JSON.stringify({email:email,senha:senha})
+            // });
+
+            var loginResult = await axios.post<LoginResponse>('http://localhost:8080/auth/login',
+                {email:email,senha:senha});
+
+            if(loginResult.status !== 200){
+                alert("Usuario ou senha invalido!")
+                return;
+            }
+
+            const usuarioMock = new Usuario(1,"Professor Samuel Matos","","ATIVO");
+          
+            
+            login(usuarioMock,loginResult.data.token);
 
 
         }catch(error){

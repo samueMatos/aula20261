@@ -1,6 +1,7 @@
 'use client'
 import { Usuario } from "@/app/context/AuthContext"
 import { UsuarioMock } from "@/app/mock/usuario";
+import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react"
@@ -14,33 +15,34 @@ export default function UsuarioForm({ usuarioExistente }: UsuarioFormProps) {
 
 
     const [usuario, setUsuario] = useState<Usuario>(
-        usuarioExistente || new Usuario(0, '', '', true)
+        usuarioExistente || new Usuario(null, '', '', "ATIVO")
     );
 
     const router = useRouter();
 
-    const handleChange = (campo: 'nome' | 'cpf', valor: string) => {
+    const handleChange = (campo: 'nome' | 'email', valor: string) => {
         setUsuario(prev =>
             new Usuario(
-                prev.codigo,
+                prev.id,
                 campo === 'nome' ? valor : prev.nome,
-                campo === 'cpf' ? valor : prev.cpf,
-                prev.ativo
+                campo === 'email' ? valor : prev.email,
+                prev.status
             )
         )
     }
 
     const handleSalvar = async (formData: FormData) => {
 
-        await UsuarioMock.salvar(usuario);
+       var dadosResult = await axios.post<number>('http://localhost:8080/usuarios',usuario);
 
 
-        alert("Usuário salvo com sucesso!")
+       if(dadosResult.status!== 200){
+        return;
+       }
 
+        alert("Usuário salvo com sucesso! Código:" + dadosResult.data )
 
         router.push("/usuarios")
-
-
     }
 
 
@@ -63,18 +65,17 @@ export default function UsuarioForm({ usuarioExistente }: UsuarioFormProps) {
             />
         </div>
 
-        {/* Campo: CPF (Ocupa a outra coluna no grid) */}
+       
         <div className="flex flex-col gap-1.5">
             <label className="text-sm font-semibold text-slate-700">
-                CPF
+                Email
             </label>
             <input
-                type="text"
+                type="email"
+                placeholder="seu@email.com"
                 required
-                maxLength={14}
-                value={usuario.cpf}
-                onChange={(e) => handleChange('cpf', e.target.value)}
-                placeholder="000.000.000-00"
+                value={usuario.email}
+                onChange={(e) => handleChange('email', e.target.value)}
                 className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-500 transition-all outline-none"
             />
         </div>
