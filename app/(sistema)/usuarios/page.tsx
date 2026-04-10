@@ -30,12 +30,22 @@ export default function Usuarios() {
 
     const handlerAlerarStatus = async (usuario: Usuario) => {
         try {
-            setUsuarios(usuariosAtuais =>
-                usuariosAtuais.map(u =>
-                    u.id === usuario.id
-                        ? new Usuario(u.id, u.nome, u.email, u.status)
-                        : u
-                ));
+            var novoStatus ={};
+            if(usuario.status === "ATIVO"){
+                novoStatus = { status: "INATIVO"};
+            }else{
+                novoStatus = { status: "ATIVO"};
+            }
+            
+
+            var dadosResult = await axios
+            .put<number>('http://localhost:8080/usuarios/'+usuario.id+'/AlterarStatus', novoStatus);
+          
+            if (dadosResult.status !== 200) {
+                return;
+            }
+            alert("Usuário salvo com sucesso! Código:" + dadosResult.data)
+
         } catch (error) {
             alert("Erro ao alterar status do usuário!")
         }

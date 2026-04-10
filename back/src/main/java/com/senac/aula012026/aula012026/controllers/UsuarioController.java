@@ -1,6 +1,7 @@
 package com.senac.aula012026.aula012026.controllers;
 
 
+import com.senac.aula012026.aula012026.model.DTO.AlterarStatusRequest;
 import com.senac.aula012026.aula012026.model.entities.Usuario;
 import com.senac.aula012026.aula012026.model.repository.UsuarioRepository;
 import io.swagger.v3.oas.annotations.Operation;
@@ -53,6 +54,7 @@ public class UsuarioController {
             usuarioBanco.setNome(usuario.getNome());
             usuarioBanco.setSenha(usuario.getSenha());
             usuarioBanco.setStatus(usuario.getStatus());
+
             
             usuarioRepository.save(usuarioBanco);
 
@@ -62,5 +64,22 @@ public class UsuarioController {
 
         return ResponseEntity.notFound().build();
     }
+
+    @PutMapping("/{id}/AlterarStatus")
+    public ResponseEntity<?> AlterarStatus(@PathVariable Long id, @RequestBody AlterarStatusRequest statusRequest){
+
+        var usuarioBanco = usuarioRepository.findById(id).orElse(null);
+
+        if (usuarioBanco != null){
+
+            usuarioBanco.setStatus(statusRequest.status());
+            usuarioRepository.save(usuarioBanco);
+
+            return ResponseEntity.ok("Atualizado com sucesso!");
+        }
+
+        return ResponseEntity.notFound().build();
+    }
+
 
 }
