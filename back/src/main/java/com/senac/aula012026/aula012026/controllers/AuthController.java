@@ -4,6 +4,7 @@ package com.senac.aula012026.aula012026.controllers;
 import com.senac.aula012026.aula012026.model.DTO.LoginRequest;
 import com.senac.aula012026.aula012026.model.DTO.LoginResponse;
 import com.senac.aula012026.aula012026.model.repository.UsuarioRepository;
+import com.senac.aula012026.aula012026.services.TokenService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +21,19 @@ public class AuthController {
     private UsuarioRepository usuarioRepository;
 
 
+    @Autowired
+    private TokenService tokenService;
+
     @PostMapping("/login")
     @Operation(description = "Valida senha asdhaukshd 50 carecteres, calcula longitudo com latitud!",summary = "Login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest){
 
 
         if(loginRequest.email().equals("String@s") &&  loginRequest.senha().equals("String")){
-            return ResponseEntity.ok(new LoginResponse("Sasdasdas123"));
+
+            var token = tokenService.gerarToken(loginRequest.email());
+
+            return ResponseEntity.ok(new LoginResponse(token));
         }
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
