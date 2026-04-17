@@ -13,7 +13,6 @@ export default function SistemaLayout({ children }:
   const router = useRouter();
 
   useEffect(() => {
-    debugger;
     if (usuario == null) {
 
       router.push("/login")

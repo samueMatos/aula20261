@@ -2,22 +2,8 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import { AuthContextType, Usuario } from "../types/usuarios";
 
-export class Usuario {
-    constructor(
-        public id: number|null,
-        public nome: string,
-        public email: string,
-        public status: string
-    ) { }
-}
-
-interface AuthContextType {
-    usuario: Usuario | null,
-    token: string | null,
-    login: (usuario: Usuario, token: string) => void,
-    logout: () => void
-}
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -27,7 +13,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const router = useRouter();
 
     useEffect(() => {
-        debugger;
+        
         const usuarioRecover = Cookies.get('usuario');
         const tokenRecover = Cookies.get('token');
 
@@ -45,7 +31,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }, []);
 
     const login = (usuario: Usuario, token: string) => {
-        debugger;
+        
         setUsuario(usuario);
         setToken(token);
         Cookies.set('usuario', JSON.stringify(usuario), { expires: 7 });

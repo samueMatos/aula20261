@@ -1,12 +1,10 @@
 'use client'
 
 import { useRouter } from "next/navigation";
-import { useAuth, Usuario } from "../context/AuthContext";
 import axios from "axios";
-
-interface LoginResponse{
-    token: string
-}
+import { useAuth } from "../context/AuthContext";
+import { Usuario } from "../types/usuarios";
+import { LoginResponse } from "../types/auth";
 
 export default function LoginPage() {
     const router = useRouter();
@@ -20,7 +18,6 @@ export default function LoginPage() {
 
         try{
             
-            debugger;
             // var loginResult = await fetch("http://localhost:8080/auth/login",{
             //     method :'POST',
             //     headers:{

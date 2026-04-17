@@ -1,6 +1,6 @@
 'use client'
-import { Usuario } from "@/app/context/AuthContext";
-import { UsuarioMock } from "@/app/mock/usuario";
+import { alterarStatusUsuario, buscarListaUsuarios } from "@/app/services/usuarioService";
+import { Usuario } from "@/app/types/usuarios";
 import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -15,36 +15,22 @@ export default function Usuarios() {
 
     const carregarDados = async () => {
         try {
-            const dados = await axios.get<Usuario[]>('http://localhost:8080/usuarios');
-
-            if(dados.status!==200){
-                alert("Erro ao carregar dados!");
-            }
-
-            setUsuarios(dados.data);
+            const dados = await buscarListaUsuarios();
+            setUsuarios(dados);
 
         } catch (error) {
+            alert("Erro ao carregar dados dos usuário!")
             console.error(error)
         }
     }
 
     const handlerAlerarStatus = async (usuario: Usuario) => {
         try {
-            var novoStatus ={};
-            if(usuario.status === "ATIVO"){
-                novoStatus = { status: "INATIVO"};
-            }else{
-                novoStatus = { status: "ATIVO"};
-            }
-            
+           
+            await alterarStatusUsuario(usuario)
+            carregarDados();
 
-            var dadosResult = await axios
-            .put<number>('http://localhost:8080/usuarios/'+usuario.id+'/AlterarStatus', novoStatus);
-          
-            if (dadosResult.status !== 200) {
-                return;
-            }
-            alert("Usuário salvo com sucesso! Código:" + dadosResult.data)
+            alert("Usuário salvo com sucesso! Código:" + usuario.id)
 
         } catch (error) {
             alert("Erro ao alterar status do usuário!")
