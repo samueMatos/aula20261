@@ -5,7 +5,13 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.senac.aula012026.aula012026.model.entities.Token;
+import com.senac.aula012026.aula012026.model.entities.Usuario;
+import com.senac.aula012026.aula012026.model.repository.TokenRepository;
+import com.senac.aula012026.aula012026.model.repository.UsuarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -25,14 +31,30 @@ public class TokenService {
     @Value("${spring.tempoExpiracao}")
     private Long tempoExpiracao;
 
+    @Autowired
+    private TokenRepository tokenRepository;
 
-    public DecodedJWT validarToken(String token){
-        Algorithm algoritomo = Algorithm.HMAC256(secret);
-        JWTVerifier verifier = JWT.require(algoritomo)
-                .withIssuer(emissor)
-                .build();
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
-        return verifier.verify(token);
+
+    public Usuario validarToken(String token) {
+
+        try {
+
+            Algorithm algoritomo = Algorithm.HMAC256(secret);
+            JWTVerifier verifier = JWT.require(algoritomo)
+                    .withIssuer(emissor)
+                    .build();
+            verifier.verify(token);
+
+            var tokenBanco = tokenRepository.findTokenByToken(token);
+
+            return tokenBanco.get().getUsuario();
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
@@ -45,6 +67,12 @@ public class TokenService {
                         .withSubject(email)
                         .withExpiresAt(gerarDataExpiracao())
                         .sign(algoritomo);
+
+                var usuario = usuarioRepository.findAll()
+                        .stream()
+                        .filter(u -> u.getEmail().equals(email)).findFirst().orElse(null);
+
+                tokenRepository.save(new Token(token,usuario));
 
                 return token;
 

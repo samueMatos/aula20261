@@ -4,11 +4,20 @@ package com.senac.aula012026.aula012026.model.entities;
 import com.senac.aula012026.aula012026.model.enuns.EnumStatusUsuario;
 import jakarta.persistence.*;
 import lombok.*;
+import org.jspecify.annotations.Nullable;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "usuario")
-public class Usuario {
-
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Usuario implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,45 +29,23 @@ public class Usuario {
 
     private String senha;
 
+    private String role;
+
     private EnumStatusUsuario status = EnumStatusUsuario.ATIVO;
 
-    public Long getId() {
-        return id;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(this.role));
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    @Override
+    public @Nullable String getPassword() {
+       return this.senha;
     }
 
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-
-    public EnumStatusUsuario getStatus() {
-        return status;
-    }
-
-    public void setStatus(EnumStatusUsuario status) {
-        this.status = status;
+    @Override
+    public String getUsername() {
+        return  this.email;
     }
 }
