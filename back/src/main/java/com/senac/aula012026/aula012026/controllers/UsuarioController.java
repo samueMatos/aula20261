@@ -4,6 +4,7 @@ package com.senac.aula012026.aula012026.controllers;
 import com.senac.aula012026.aula012026.model.DTO.AlterarStatusRequest;
 import com.senac.aula012026.aula012026.model.entities.Usuario;
 import com.senac.aula012026.aula012026.model.repository.UsuarioRepository;
+import com.senac.aula012026.aula012026.services.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +22,16 @@ public class UsuarioController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private UsuarioService usuarioService;
+
 
     @GetMapping
     @Operation(summary = "Listar todos",description = "Método para listar todos os usuários!")
     public ResponseEntity<List<Usuario>> listarTodos(){
 
-        var usuarios = usuarioRepository.findAll();
+        var usuarios = usuarioService.ListarTodos();
+
         return ResponseEntity.ok(usuarios);
     }
 
@@ -34,15 +39,17 @@ public class UsuarioController {
     @Operation(summary = "Consulta usuario logado",description = "busca usuario da sessãoo")
     public ResponseEntity<Usuario> buscarUsarioLogado(Authentication authentication){
         Usuario usuario = (Usuario) authentication.getPrincipal();
-
-        return ResponseEntity.ok(usuarioRepository.findById(usuario.getId()).orElse(null));
+        return ResponseEntity.ok(usuarioService.BuscarUsuarioLogado(usuario));
     }
 
 
     @GetMapping("/{id}")
     @Operation(summary = "Consulta de usuario por ID", description = "Médoto responsavel por consultar um unico usuario por ID e se não existir retorna null!")
     public ResponseEntity<Usuario> buscarPorId(@PathVariable Long id){
-        return ResponseEntity.ok(usuarioRepository.findById(id).orElse(null));
+
+
+        return ResponseEntity.ok(usuarioService.BuscarUsuarioPorId(id));
+
     }
 
     @PostMapping
@@ -56,22 +63,8 @@ public class UsuarioController {
     @Operation(summary = "Atualizar usuario",description = "Metodo resposavel por atualizar usuário")
     public ResponseEntity<?> alterarUsuario (@PathVariable Long id, @RequestBody Usuario usuario){
 
-        var usuarioBanco = usuarioRepository.findById(id).orElse(null);
-
-        if (usuarioBanco != null){
-            usuarioBanco.setEmail(usuario.getEmail());
-            usuarioBanco.setNome(usuario.getNome());
-            usuarioBanco.setSenha(usuario.getSenha());
-            usuarioBanco.setStatus(usuario.getStatus());
-
-            
-            usuarioRepository.save(usuarioBanco);
-
-            return ResponseEntity.ok("Atualizado com sucesso!");
-        }
-
-
-        return ResponseEntity.notFound().build();
+        var alterarUsuarioResult = usuarioService.AterarUsuario(id,usuario);
+        return alterarUsuarioResult ? ResponseEntity.ok("Atualizado com sucesso!") : ResponseEntity.notFound().build();
     }
 
     @PutMapping("/{id}/AlterarStatus")
