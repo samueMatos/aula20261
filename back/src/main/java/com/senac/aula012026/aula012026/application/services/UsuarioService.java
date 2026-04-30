@@ -1,13 +1,15 @@
-package com.senac.aula012026.aula012026.services;
+package com.senac.aula012026.aula012026.application.services;
 
-import com.senac.aula012026.aula012026.model.DTO.LoginRequest;
-import com.senac.aula012026.aula012026.model.entities.Usuario;
-import com.senac.aula012026.aula012026.model.repository.UsuarioRepository;
+import com.senac.aula012026.aula012026.application.DTO.LoginRequest;
+import com.senac.aula012026.aula012026.application.DTO.UsuarioRequest;
+import com.senac.aula012026.aula012026.application.DTO.UsuarioResponse;
+import com.senac.aula012026.aula012026.domain.entities.Usuario;
+import com.senac.aula012026.aula012026.domain.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UsuarioService {
@@ -27,9 +29,12 @@ public class UsuarioService {
     }
 
 
-    public List<Usuario> ListarTodos() {
+    public List<UsuarioResponse> ListarTodos() {
         try{
-            return usuarioRepository.findAll();
+            return usuarioRepository.findAll()
+                    .stream()
+                    .map(UsuarioResponse::new)
+                    .collect(Collectors.toList());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -44,9 +49,10 @@ public class UsuarioService {
         }
     }
 
-    public Usuario BuscarUsuarioPorId(Long id) {
+    public UsuarioResponse BuscarUsuarioPorId(Long id) {
         try{
-            return usuarioRepository.findById(id).orElse(null);
+           var usuario = usuarioRepository.findById(id).orElse(null);
+           return new UsuarioResponse(usuario);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -70,5 +76,14 @@ public class UsuarioService {
         }
 
         return false;
+    }
+
+    public Long SalvarUsuario(UsuarioRequest usuario) {
+        try {
+            return usuarioRepository.save(new Usuario(usuario)).getId();
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }
+
     }
 }

@@ -1,4 +1,4 @@
-package com.senac.aula012026.aula012026.config;
+package com.senac.aula012026.aula012026.infra.config;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;

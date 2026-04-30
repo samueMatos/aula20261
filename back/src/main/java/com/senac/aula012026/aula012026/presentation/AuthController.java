@@ -1,11 +1,10 @@
-package com.senac.aula012026.aula012026.controllers;
+package com.senac.aula012026.aula012026.presentation;
 
 
-import com.senac.aula012026.aula012026.model.DTO.LoginRequest;
-import com.senac.aula012026.aula012026.model.DTO.LoginResponse;
-import com.senac.aula012026.aula012026.model.repository.UsuarioRepository;
-import com.senac.aula012026.aula012026.services.TokenService;
-import com.senac.aula012026.aula012026.services.UsuarioService;
+import com.senac.aula012026.aula012026.application.DTO.LoginRequest;
+import com.senac.aula012026.aula012026.application.DTO.LoginResponse;
+import com.senac.aula012026.aula012026.application.services.TokenService;
+import com.senac.aula012026.aula012026.application.services.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +16,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 @Tag(description = "Serviço responsavel por controlar a autenticação de usuarios e sessão!",name = "Serviço autenticação")
 public class AuthController {
-
-    @Autowired
-    private UsuarioRepository usuarioRepository;
-
 
     @Autowired
     private TokenService tokenService;

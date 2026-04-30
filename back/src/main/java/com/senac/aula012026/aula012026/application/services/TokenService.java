@@ -1,17 +1,15 @@
-package com.senac.aula012026.aula012026.services;
+package com.senac.aula012026.aula012026.application.services;
 
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.DecodedJWT;
-import com.senac.aula012026.aula012026.model.entities.Token;
-import com.senac.aula012026.aula012026.model.entities.Usuario;
-import com.senac.aula012026.aula012026.model.repository.TokenRepository;
-import com.senac.aula012026.aula012026.model.repository.UsuarioRepository;
+import com.senac.aula012026.aula012026.domain.entities.Token;
+import com.senac.aula012026.aula012026.domain.entities.Usuario;
+import com.senac.aula012026.aula012026.domain.repository.TokenRepository;
+import com.senac.aula012026.aula012026.domain.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;

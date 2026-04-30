@@ -1,10 +1,12 @@
-package com.senac.aula012026.aula012026.controllers;
+package com.senac.aula012026.aula012026.presentation;
 
 
-import com.senac.aula012026.aula012026.model.DTO.AlterarStatusRequest;
-import com.senac.aula012026.aula012026.model.entities.Usuario;
-import com.senac.aula012026.aula012026.model.repository.UsuarioRepository;
-import com.senac.aula012026.aula012026.services.UsuarioService;
+import com.senac.aula012026.aula012026.application.DTO.AlterarStatusRequest;
+import com.senac.aula012026.aula012026.application.DTO.UsuarioRequest;
+import com.senac.aula012026.aula012026.application.DTO.UsuarioResponse;
+import com.senac.aula012026.aula012026.domain.entities.Usuario;
+import com.senac.aula012026.aula012026.domain.repository.UsuarioRepository;
+import com.senac.aula012026.aula012026.application.services.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,35 +30,24 @@ public class UsuarioController {
 
     @GetMapping
     @Operation(summary = "Listar todos",description = "Método para listar todos os usuários!")
-    public ResponseEntity<List<Usuario>> listarTodos(){
+    public ResponseEntity<List<UsuarioResponse>> listarTodos(){
 
         var usuarios = usuarioService.ListarTodos();
 
         return ResponseEntity.ok(usuarios);
     }
 
-    @GetMapping("/usuariologado")
-    @Operation(summary = "Consulta usuario logado",description = "busca usuario da sessãoo")
-    public ResponseEntity<Usuario> buscarUsarioLogado(Authentication authentication){
-        Usuario usuario = (Usuario) authentication.getPrincipal();
-        return ResponseEntity.ok(usuarioService.BuscarUsuarioLogado(usuario));
-    }
-
-
     @GetMapping("/{id}")
     @Operation(summary = "Consulta de usuario por ID", description = "Médoto responsavel por consultar um unico usuario por ID e se não existir retorna null!")
-    public ResponseEntity<Usuario> buscarPorId(@PathVariable Long id){
-
-
+    public ResponseEntity<UsuarioResponse> buscarPorId(@PathVariable Long id){
         return ResponseEntity.ok(usuarioService.BuscarUsuarioPorId(id));
-
     }
 
     @PostMapping
     @Operation(summary = "Criar usuario",description = "Metodo resposavel por criar usuário")
-    public ResponseEntity<Long> salvar (@RequestBody Usuario usuario){
+    public ResponseEntity<Long> salvar (@RequestBody UsuarioRequest usuario){
 
-        return ResponseEntity.ok(usuarioRepository.save(usuario).getId());
+        return ResponseEntity.ok(usuarioService.SalvarUsuario(usuario));
     }
 
     @PutMapping("/{id}")
@@ -81,6 +72,13 @@ public class UsuarioController {
         }
 
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/usuariologado")
+    @Operation(summary = "Consulta usuario logado",description = "busca usuario da sessãoo")
+    public ResponseEntity<Usuario> buscarUsarioLogado(Authentication authentication){
+        Usuario usuario = (Usuario) authentication.getPrincipal();
+        return ResponseEntity.ok(usuarioService.BuscarUsuarioLogado(usuario));
     }
 
 

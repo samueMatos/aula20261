@@ -1,4 +1,4 @@
-package com.senac.aula012026.aula012026.model.entities;
+package com.senac.aula012026.aula012026.domain.entities;
 
 
 import jakarta.persistence.*;

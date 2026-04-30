@@ -1,7 +1,8 @@
-package com.senac.aula012026.aula012026.model.entities;
+package com.senac.aula012026.aula012026.domain.entities;
 
 
-import com.senac.aula012026.aula012026.model.enuns.EnumStatusUsuario;
+import com.senac.aula012026.aula012026.application.DTO.UsuarioRequest;
+import com.senac.aula012026.aula012026.domain.enuns.EnumStatusUsuario;
 import jakarta.persistence.*;
 import lombok.*;
 import org.jspecify.annotations.Nullable;
@@ -32,6 +33,13 @@ public class Usuario implements UserDetails {
     private String role;
 
     private EnumStatusUsuario status = EnumStatusUsuario.ATIVO;
+
+    public Usuario(UsuarioRequest usuario) {
+        this.email =usuario.email();
+        this.nome = usuario.nome();
+        this.senha = usuario.senha();
+        this.role = "ROLE_USER";
+    }
 
 
     @Override

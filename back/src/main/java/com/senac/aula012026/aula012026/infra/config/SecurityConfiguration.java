@@ -1,4 +1,4 @@
-package com.senac.aula012026.aula012026.config;
+package com.senac.aula012026.aula012026.infra.config;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
