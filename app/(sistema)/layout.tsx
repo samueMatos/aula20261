@@ -2,14 +2,15 @@
 import { useEffect } from "react";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import { useAuth } from "../context/AuthContext";
 import { useRouter } from "next/navigation";
 import Sidebar from "../components/Sidebar";
+import { RootState, store } from "../redux/store";
+import { useSelector } from "react-redux";
 
 export default function SistemaLayout({ children }:
   { children: React.ReactNode }) {
 
-  const { usuario } = useAuth();
+  const usuario = useSelector((state :RootState) => state.auth.usuario);
   const router = useRouter();
 
   useEffect(() => {

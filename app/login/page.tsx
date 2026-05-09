@@ -2,22 +2,22 @@
 
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { useAuth } from "../context/AuthContext";
 import { Usuario } from "../types/usuarios";
 import { LoginResponse } from "../types/auth";
+import { useDispatch } from "react-redux";
+import { login } from "../redux/slices/authSlice";
 
 export default function LoginPage() {
     const router = useRouter();
-    const {login} = useAuth();
+    const dispatch = useDispatch();
 
-
-    const handleLogin = async ( formData : FormData) => {
+    const handleLogin = async (formData: FormData) => {
 
         const email = formData.get("email");
         const senha = formData.get("senha");
 
-        try{
-            
+        try {
+
             // var loginResult = await fetch("http://localhost:8080/auth/login",{
             //     method :'POST',
             //     headers:{
@@ -27,23 +27,28 @@ export default function LoginPage() {
             // });
 
             var loginResult = await axios.post<LoginResponse>('http://localhost:8080/auth/login',
-                {email:email,senha:senha});
+                { email: email, senha: senha });
 
-            if(loginResult.status !== 200){
+            if (loginResult.status !== 200) {
                 alert("Usuario ou senha invalido!")
                 return;
             }
 
-            const usuarioMock = new Usuario(1,"Professor Samuel Matos","","ATIVO");
-          
-            
-            login(usuarioMock,loginResult.data.token);
+            const usuarioMock = new Usuario(1, "Professor Samuel Matos", "", "ATIVO");
+
+            dispatch(login(
+                {
+                    usuario: {...usuarioMock},
+                    token: loginResult.data.token
+                }
+            ));
 
 
-        }catch(error){
+
+        } catch (error) {
             alert("Erro ao entrar no sistema!")
         }
-       
+
 
         console.log(`autenticado com email: ${email}`)
 
