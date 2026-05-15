@@ -50,6 +50,14 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioService.SalvarUsuario(usuario));
     }
 
+    @PostMapping("/adm")
+    @Operation(summary = "Criar usuario adm",description = "Metodo resposavel por criar usuário")
+    public ResponseEntity<Long> salvarAdm (@RequestBody UsuarioRequest usuario){
+
+        return ResponseEntity.ok(usuarioService.SalvarUsuario(usuario));
+    }
+
+
     @PutMapping("/{id}")
     @Operation(summary = "Atualizar usuario",description = "Metodo resposavel por atualizar usuário")
     public ResponseEntity<?> alterarUsuario (@PathVariable Long id, @RequestBody Usuario usuario){
