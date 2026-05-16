@@ -42,7 +42,7 @@ public class UsuarioController {
     private void onSalvarButtonClick(ActionEvent event)  throws IOException{
 
 
-        URL url = new URL("http://localhost:8080/usuarioAdm");
+        URL url = new URL("http://localhost:8080/usuarios/adm");
 
         HttpURLConnection conn =(HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
@@ -53,6 +53,7 @@ public class UsuarioController {
         String json = "{\n" +
                 "  \"nome\": \""+txtNome.getText()+"\",\n" +
                 "  \"email\": \""+txtEmail.getText()+"\",\n" +
+                "  \"secretKey\": \"vvg47dg8szer7ghs9v8a7g98ae\",\n" +
                 "  \"senha\": \""+txtSenha.getText()+"\"\n" +
                 "}";
 

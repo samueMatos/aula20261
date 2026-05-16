@@ -2,6 +2,7 @@ package com.senac.aula012026.aula012026.presentation;
 
 
 import com.senac.aula012026.aula012026.application.DTO.AlterarStatusRequest;
+import com.senac.aula012026.aula012026.application.DTO.UsuarioAdmRequest;
 import com.senac.aula012026.aula012026.application.DTO.UsuarioRequest;
 import com.senac.aula012026.aula012026.application.DTO.UsuarioResponse;
 import com.senac.aula012026.aula012026.domain.entities.Usuario;
@@ -52,9 +53,9 @@ public class UsuarioController {
 
     @PostMapping("/adm")
     @Operation(summary = "Criar usuario adm",description = "Metodo resposavel por criar usuário")
-    public ResponseEntity<Long> salvarAdm (@RequestBody UsuarioRequest usuario){
+    public ResponseEntity<Long> salvarAdm (@RequestBody UsuarioAdmRequest usuario){
 
-        return ResponseEntity.ok(usuarioService.SalvarUsuario(usuario));
+        return ResponseEntity.ok(usuarioService.SalvarUsuarioAdm(usuario));
     }
 
 

@@ -1,6 +1,7 @@
 package com.senac.aula012026.aula012026.domain.entities;
 
 
+import com.senac.aula012026.aula012026.application.DTO.UsuarioAdmRequest;
 import com.senac.aula012026.aula012026.application.DTO.UsuarioRequest;
 import com.senac.aula012026.aula012026.domain.enuns.EnumStatusUsuario;
 import jakarta.persistence.*;
@@ -39,6 +40,13 @@ public class Usuario implements UserDetails {
         this.nome = usuario.nome();
         this.senha = usuario.senha();
         this.role = "ROLE_USER";
+    }
+
+    public Usuario(UsuarioAdmRequest usuario) {
+        this.email =usuario.email();
+        this.nome = usuario.nome();
+        this.senha = usuario.senha();
+        this.role = "ROLE_ADMIN";
     }
 
 

@@ -1,11 +1,13 @@
 package com.senac.aula012026.aula012026.application.services;
 
 import com.senac.aula012026.aula012026.application.DTO.LoginRequest;
+import com.senac.aula012026.aula012026.application.DTO.UsuarioAdmRequest;
 import com.senac.aula012026.aula012026.application.DTO.UsuarioRequest;
 import com.senac.aula012026.aula012026.application.DTO.UsuarioResponse;
 import com.senac.aula012026.aula012026.domain.entities.Usuario;
 import com.senac.aula012026.aula012026.domain.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +18,9 @@ public class UsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Value("${spring.secretkey}")
+    private String secret;
 
 
     public boolean ValidaUsuarioSenha(LoginRequest loginRequest) {
@@ -81,6 +86,22 @@ public class UsuarioService {
     public Long SalvarUsuario(UsuarioRequest usuario) {
         try {
             return usuarioRepository.save(new Usuario(usuario)).getId();
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public Long SalvarUsuarioAdm(UsuarioAdmRequest usuario) {
+        try {
+
+            if(usuario.secretKey().equals( secret)) {
+                return usuarioRepository.save(new Usuario(usuario)).getId();
+            }else
+            {
+                return 0L;
+            }
+
         }catch (Exception e){
             throw new RuntimeException(e);
         }
