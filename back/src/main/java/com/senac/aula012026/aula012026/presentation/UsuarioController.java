@@ -5,8 +5,6 @@ import com.senac.aula012026.aula012026.application.DTO.AlterarStatusRequest;
 import com.senac.aula012026.aula012026.application.DTO.UsuarioAdmRequest;
 import com.senac.aula012026.aula012026.application.DTO.UsuarioRequest;
 import com.senac.aula012026.aula012026.application.DTO.UsuarioResponse;
-import com.senac.aula012026.aula012026.domain.entities.Usuario;
-import com.senac.aula012026.aula012026.domain.repository.UsuarioRepository;
 import com.senac.aula012026.aula012026.application.services.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,9 +19,6 @@ import java.util.List;
 @RequestMapping("/usuarios")
 @Tag(name = "Usuarios controller",description = "Controladora responsavel por gerenciar os usuarios!")
 public class UsuarioController {
-
-    @Autowired
-    private UsuarioRepository usuarioRepository;
 
     @Autowired
     private UsuarioService usuarioService;
@@ -70,17 +65,10 @@ public class UsuarioController {
     @PutMapping("/{id}/AlterarStatus")
     public ResponseEntity<?> AlterarStatus(@PathVariable Long id, @RequestBody AlterarStatusRequest statusRequest){
 
-        var usuarioBanco = usuarioRepository.findById(id).orElse(null);
+        boolean alterarStatusResult = usuarioService.AlterarStatus(id,statusRequest);
+        return alterarStatusResult ? ResponseEntity.ok("Atualizado com sucesso!") : ResponseEntity.notFound().build();
 
-        if (usuarioBanco != null){
 
-            usuarioBanco.setStatus(statusRequest.status());
-            usuarioRepository.save(usuarioBanco);
-
-            return ResponseEntity.ok("Atualizado com sucesso!");
-        }
-
-        return ResponseEntity.notFound().build();
     }
 
     @GetMapping("/usuariologado")

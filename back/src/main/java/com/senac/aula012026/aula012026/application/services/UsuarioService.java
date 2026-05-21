@@ -1,13 +1,11 @@
 package com.senac.aula012026.aula012026.application.services;
 
-import com.senac.aula012026.aula012026.application.DTO.LoginRequest;
-import com.senac.aula012026.aula012026.application.DTO.UsuarioAdmRequest;
-import com.senac.aula012026.aula012026.application.DTO.UsuarioRequest;
-import com.senac.aula012026.aula012026.application.DTO.UsuarioResponse;
+import com.senac.aula012026.aula012026.application.DTO.*;
 import com.senac.aula012026.aula012026.domain.entities.Usuario;
 import com.senac.aula012026.aula012026.domain.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -108,5 +106,19 @@ public class UsuarioService {
             throw new RuntimeException(e);
         }
 
+    }
+
+    public boolean AlterarStatus(Long id, AlterarStatusRequest statusRequest) {
+
+        var usuarioBanco = usuarioRepository.findById(id).orElse(null);
+
+        if (usuarioBanco != null){
+
+            usuarioBanco.setStatus(statusRequest.status());
+            usuarioRepository.save(usuarioBanco);
+
+            return true;
+        }
+        return false;
     }
 }
