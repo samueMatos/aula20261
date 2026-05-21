@@ -85,9 +85,9 @@ public class UsuarioController {
 
     @GetMapping("/usuariologado")
     @Operation(summary = "Consulta usuario logado",description = "busca usuario da sessãoo")
-    public ResponseEntity<Usuario> buscarUsarioLogado(Authentication authentication){
-        Usuario usuario = (Usuario) authentication.getPrincipal();
-        return ResponseEntity.ok(usuarioService.BuscarUsuarioLogado(usuario));
+    public ResponseEntity<UsuarioResponse> buscarUsarioLogado(Authentication authentication){
+
+        return ResponseEntity.ok(usuarioService.BuscarUsuarioLogado(authentication));
     }
 
 

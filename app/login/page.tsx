@@ -1,11 +1,12 @@
 'use client'
 
 import { useRouter } from "next/navigation";
-import axios from "axios";
 import { Usuario } from "../types/usuarios";
-import { LoginResponse } from "../types/auth";
+import { LoginResponse,LoginRequest } from "../types/auth";
 import { useDispatch } from "react-redux";
-import { login } from "../redux/slices/authSlice";
+import { loginService } from "../services/authService";
+import {  setToken, setUsuario } from "../redux/slices/authSlice";
+import { buscarUsuarioLogado } from "../services/usuarioService";
 
 export default function LoginPage() {
     const router = useRouter();
@@ -13,36 +14,32 @@ export default function LoginPage() {
 
     const handleLogin = async (formData: FormData) => {
 
-        const email = formData.get("email");
-        const senha = formData.get("senha");
+        const email = formData.get("email")?.toString() ?? "";
+        const senha = formData.get("senha")?.toString() ?? "";
 
         try {
 
-            // var loginResult = await fetch("http://localhost:8080/auth/login",{
-            //     method :'POST',
-            //     headers:{
-            //         'Content-Type':'application/json'
-            //     },
-            //     body: JSON.stringify({email:email,senha:senha})
-            // });
-
-            var loginResult = await axios.post<LoginResponse>('http://localhost:8080/auth/login',
-                { email: email, senha: senha });
-
-            if (loginResult.status !== 200) {
+            const loginResult = await loginService({email:email,senha:senha});
+            debugger;
+            if (!loginResult.token) {
                 alert("Usuario ou senha invalido!")
                 return;
             }
-
-            const usuario = new Usuario(1, "Professor Samuel Matos", "", "ATIVO",'');
-
-            dispatch(login(
+            var token = loginResult.token;
+            
+           
+            dispatch(setToken(
                 {
-                    usuario: {...usuario},
-                    token: loginResult.data.token
+                    token: token
                 }
             ));
+            const usuario = await buscarUsuarioLogado();
 
+             dispatch(setUsuario(
+                {
+                    usuario: {...usuario}
+                }
+            ));
 
 
         } catch (error) {

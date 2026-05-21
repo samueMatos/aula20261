@@ -16,13 +16,18 @@ const authSlice = createSlice({
         name:'auth',
         initialState,
         reducers:{
-            login : (state, action: PayloadAction<{usuario: Usuario, token: string}>) => {
+            setToken : (state, action: PayloadAction<{ token: string}>) => {
 
                 state.token = action.payload.token;
+                 Cookies.set('token', action.payload.token, { expires: 7, secure: true })
+
+
+            },
+            setUsuario : (state, action: PayloadAction<{usuario: Usuario}>) => {
+
                 state.usuario = action.payload.usuario;
                 Cookies.set('usuario', JSON.stringify(action.payload.usuario), { expires: 7 });
-                Cookies.set('token', action.payload.token, { expires: 7, secure: true })
-
+              
 
             },
             logout : (state) => {
@@ -35,5 +40,5 @@ const authSlice = createSlice({
         }
     });
 
-    export const { login, logout } = authSlice.actions;
+    export const { setToken,setUsuario, logout } = authSlice.actions;
     export default authSlice.reducer;

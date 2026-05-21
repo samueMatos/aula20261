@@ -8,10 +8,12 @@ import com.senac.aula012026.aula012026.domain.entities.Usuario;
 import com.senac.aula012026.aula012026.domain.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class UsuarioService {
@@ -45,10 +47,11 @@ public class UsuarioService {
         }
     }
 
-    public Usuario BuscarUsuarioLogado(Usuario usuario) {
-
+    public UsuarioResponse BuscarUsuarioLogado(Authentication authentication) {
+        Usuario usuario = (Usuario) authentication.getPrincipal();
         try{
-            return   usuarioRepository.findById(usuario.getId()).orElse(null);
+            return  usuarioRepository.findById(usuario.getId())
+                    .stream().map(UsuarioResponse::new).findFirst().orElse(null);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

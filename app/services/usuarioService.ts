@@ -47,4 +47,7 @@ export async function alterarStatusUsuario(usuario: Usuario): Promise<void> {
     }
 }
 
+export async function  buscarUsuarioLogado() : Promise<Usuario> {
+     return (await api.get<Usuario>('http://localhost:8080/usuarios/usuariologado')).data;
+}
 
