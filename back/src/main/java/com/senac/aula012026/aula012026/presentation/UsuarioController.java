@@ -61,7 +61,7 @@ public class UsuarioController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Atualizar usuario",description = "Metodo resposavel por atualizar usuário")
-    public ResponseEntity<?> alterarUsuario (@PathVariable Long id, @RequestBody Usuario usuario){
+    public ResponseEntity<?> alterarUsuario (@PathVariable Long id, @RequestBody UsuarioRequest usuario){
 
         var alterarUsuarioResult = usuarioService.AterarUsuario(id,usuario);
         return alterarUsuarioResult ? ResponseEntity.ok("Atualizado com sucesso!") : ResponseEntity.notFound().build();

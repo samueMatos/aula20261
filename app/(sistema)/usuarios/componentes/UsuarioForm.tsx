@@ -1,4 +1,5 @@
 'use client'
+import { atualizar, salvar } from "@/app/services/usuarioService";
 import { Usuario, UsuarioFormProps } from "@/app/types/usuarios";
 import axios from "axios";
 import Link from "next/link";
@@ -12,41 +13,41 @@ export default function UsuarioForm({ usuarioExistente }: UsuarioFormProps) {
 
 
     const [usuario, setUsuario] = useState<Usuario>(
-        usuarioExistente || new Usuario(null, '', '', "ATIVO")
+        usuarioExistente || new Usuario(null, '', '', "ATIVO",'')
     );
 
     const router = useRouter();
 
-    const handleChange = (campo: 'nome' | 'email', valor: string) => {
+    const handleChange = (campo: 'nome' | 'email'| 'senha', valor: string) => {
         setUsuario(prev =>
             new Usuario(
                 prev.id,
                 campo === 'nome' ? valor : prev.nome,
                 campo === 'email' ? valor : prev.email,
-                prev.status
+                prev.status,
+                campo === 'senha' ? valor : prev.senha,
             )
         )
     }
 
     const handleSalvar = async (formData: FormData) => {
 
+        debugger;
         if (usuarioExistente) {
-            var dadosResult = await axios
-            .put<number>('http://localhost:8080/usuarios/'+usuarioExistente.id, usuario);
-          
-            if (dadosResult.status !== 200) {
+            var dadosResult = await atualizar(usuario);
+            if (dadosResult > 0) {
                 return;
             }
-            alert("Usuário editado com sucesso! Código:" + dadosResult.data)
+            alert(dadosResult);
 
         } else {
 
-            var dadosResult = await axios.post<number>('http://localhost:8080/usuarios', usuario);
+            var dadosResult = await salvar(usuario)
 
-            if (dadosResult.status !== 200) {
+            if (dadosResult === undefined) {
                 return;
             }
-            alert("Usuário salvo com sucesso! Código:" + dadosResult.data)
+            alert("Usuário salvo com sucesso! Código:" + dadosResult)
 
         }
 
@@ -87,7 +88,19 @@ export default function UsuarioForm({ usuarioExistente }: UsuarioFormProps) {
                         className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-500 transition-all outline-none"
                     />
                 </div>
-
+                <div className="flex flex-col gap-1.5">
+                    <label className="text-sm font-semibold text-slate-700">
+                        Senha
+                    </label>
+                    <input
+                        type="password"
+                        required
+                        value={usuario.senha}
+                        onChange={(e) => handleChange('senha', e.target.value)}
+                        placeholder="***********"
+                        className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-500 transition-all outline-none"
+                    />
+                </div>
                 {/* Se você adicionar mais campos aqui, eles seguirão o padrão 2x2 automaticamente */}
 
                 {/* Área de Botões - Fazemos ela ocupar as 2 colunas (col-span-full) */}

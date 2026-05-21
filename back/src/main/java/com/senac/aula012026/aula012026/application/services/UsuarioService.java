@@ -64,15 +64,14 @@ public class UsuarioService {
 
     }
 
-    public boolean AterarUsuario(Long id, Usuario usuario) {
+    public boolean AterarUsuario(Long id, UsuarioRequest usuario) {
 
         var usuarioBanco = usuarioRepository.findById(id).orElse(null);
 
         if (usuarioBanco != null){
-            usuarioBanco.setEmail(usuario.getEmail());
-            usuarioBanco.setNome(usuario.getNome());
-            usuarioBanco.setSenha(usuario.getSenha());
-            usuarioBanco.setStatus(usuario.getStatus());
+            usuarioBanco.setEmail(usuario.email());
+            usuarioBanco.setNome(usuario.nome());
+            usuarioBanco.setSenha(usuario.senha());
 
 
             usuarioRepository.save(usuarioBanco);

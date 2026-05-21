@@ -4,7 +4,8 @@ export class Usuario {
         public id: number|null,
         public nome: string,
         public email: string,
-        public status: string
+        public status: string,
+        public senha: string 
     ) { }
 }
 

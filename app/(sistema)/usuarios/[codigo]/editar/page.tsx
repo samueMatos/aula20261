@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import UsuarioForm from "../../componentes/UsuarioForm";
 import axios from "axios";
 import { Usuario } from "@/app/types/usuarios";
+import { buscarPorId } from "@/app/services/usuarioService";
 
 
 export default function EditarUsuario(){
@@ -21,9 +22,10 @@ export default function EditarUsuario(){
     },[]);
 
     const buscarDados = async ()=>{
-      const user = await axios.get<Usuario>('http://localhost:8080/usuarios/'+codigo)
+        debugger;
+      const user = await buscarPorId(codigo)
 
-      if (user.data) setUsuario(user.data)
+      if (user) setUsuario(user)
         else router.push("/usuarios")
     }
     

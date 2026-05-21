@@ -23,8 +23,7 @@ export default function SistemaLayout({ children }:
   if (usuario == null) return null;
 
   return (
-    <div className="flex min-h-screen">
-      {/* A Sidebar agora vive dentro do fluxo do flex */}
+    <div className="flex ">
       <Sidebar />
 
       {/* Ocupa o restante do espaço horizontal e empilha V verticalmente */}

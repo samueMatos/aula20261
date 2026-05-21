@@ -34,11 +34,11 @@ export default function LoginPage() {
                 return;
             }
 
-            const usuarioMock = new Usuario(1, "Professor Samuel Matos", "", "ATIVO");
+            const usuario = new Usuario(1, "Professor Samuel Matos", "", "ATIVO",'');
 
             dispatch(login(
                 {
-                    usuario: {...usuarioMock},
+                    usuario: {...usuario},
                     token: loginResult.data.token
                 }
             ));
