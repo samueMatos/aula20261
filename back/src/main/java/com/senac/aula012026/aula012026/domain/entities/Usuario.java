@@ -4,6 +4,7 @@ package com.senac.aula012026.aula012026.domain.entities;
 import com.senac.aula012026.aula012026.application.DTO.UsuarioAdmRequest;
 import com.senac.aula012026.aula012026.application.DTO.UsuarioRequest;
 import com.senac.aula012026.aula012026.domain.enuns.EnumStatusUsuario;
+import com.senac.aula012026.aula012026.domain.valueobjects.CPF;
 import jakarta.persistence.*;
 import lombok.*;
 import org.jspecify.annotations.Nullable;
@@ -27,6 +28,9 @@ public class Usuario implements UserDetails {
 
     private String nome;
 
+    @Embedded
+    private CPF cpf;
+
     private String email;
 
     private String senha;
@@ -38,6 +42,7 @@ public class Usuario implements UserDetails {
     public Usuario(UsuarioRequest usuario) {
         this.email =usuario.email();
         this.nome = usuario.nome();
+        this.cpf = new CPF(usuario.cpf());
         this.senha = usuario.senha();
         this.role = "ROLE_USER";
     }
@@ -45,6 +50,7 @@ public class Usuario implements UserDetails {
     public Usuario(UsuarioAdmRequest usuario) {
         this.email =usuario.email();
         this.nome = usuario.nome();
+        this.cpf = new CPF(usuario.cpf());
         this.senha = usuario.senha();
         this.role = "ROLE_ADMIN";
     }

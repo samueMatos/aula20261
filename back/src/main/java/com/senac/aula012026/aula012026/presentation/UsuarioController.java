@@ -68,7 +68,6 @@ public class UsuarioController {
         boolean alterarStatusResult = usuarioService.AlterarStatus(id,statusRequest);
         return alterarStatusResult ? ResponseEntity.ok("Atualizado com sucesso!") : ResponseEntity.notFound().build();
 
-
     }
 
     @GetMapping("/usuariologado")
