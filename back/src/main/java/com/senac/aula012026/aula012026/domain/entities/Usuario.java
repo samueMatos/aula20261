@@ -10,6 +10,7 @@ import lombok.*;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -39,12 +40,23 @@ public class Usuario implements UserDetails {
 
     private EnumStatusUsuario status = EnumStatusUsuario.ATIVO;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "empresa_id", referencedColumnName = "id")
+    private Empresa empresa;
+
+
     public Usuario(UsuarioRequest usuario) {
+        var usuarioLogado = getUsuarioLogado();
         this.email =usuario.email();
         this.nome = usuario.nome();
         this.cpf = new CPF(usuario.cpf());
         this.senha = usuario.senha();
         this.role = "ROLE_USER";
+        this.empresa = usuarioLogado.getEmpresa();
+    }
+
+    public Usuario getUsuarioLogado(){
+        return (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
     public Usuario(UsuarioAdmRequest usuario) {
