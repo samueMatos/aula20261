@@ -41,11 +41,16 @@ public class UsuarioService {
 
             var empresa = usuarioLogado.getEmpresa();
 
-            return usuarioRepository.findAll()
+            return usuarioRepository.getUsuariosByEmpresa_Id(empresa.getId())
                     .stream()
-                    .filter(a-> a.getEmpresa().getId().equals(empresa.getId()))
                     .map(UsuarioResponse::new)
                     .collect(Collectors.toList());
+
+//            return usuarioRepository.findAll()
+//                    .stream()
+//                    .filter(a-> a.getEmpresa().getId().equals(empresa.getId()))
+//                    .map(UsuarioResponse::new)
+//                    .collect(Collectors.toList());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -65,7 +70,10 @@ public class UsuarioService {
 
     public UsuarioResponse BuscarUsuarioPorId(Long id) {
         try{
-           var usuario = usuarioRepository.findById(id).orElse(null);
+
+            Usuario usuarioLogado = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+           var usuario = usuarioRepository.findByIdAndEmpresa_Id(id,usuarioLogado.getEmpresa().getId()).orElse(null);
            return new UsuarioResponse(usuario);
         } catch (Exception e) {
             throw new RuntimeException(e);
