@@ -36,7 +36,7 @@ public class TokenService {
     private UsuarioRepository usuarioRepository;
 
 
-    //public Usuario validarToken(String token) {
+    public Usuario validarToken(String token) {
 
         try {
 
