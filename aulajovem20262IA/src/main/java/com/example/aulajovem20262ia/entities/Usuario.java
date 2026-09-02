@@ -2,6 +2,8 @@ package com.example.aulajovem20262ia.entities;
 
 import com.example.aulajovem20262ia.controllers.UsuarioController;
 
+import java.time.LocalDateTime;
+
 public class Usuario {
 
     public Usuario(){
@@ -22,6 +24,36 @@ public class Usuario {
     private String cpf;
 
     private String dataNascimento;
+
+    private LocalDateTime dataCadastro;
+
+    private LocalDateTime dataAtualizacao;
+
+    private String status;
+
+    public LocalDateTime getDataAtualizacao() {
+        return dataAtualizacao;
+    }
+
+    public void setDataAtualizacao(LocalDateTime dataAtualizacao) {
+        this.dataAtualizacao = dataAtualizacao;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public LocalDateTime getDataCadastro() {
+        return dataCadastro;
+    }
+
+    public void setDataCadastro(LocalDateTime dataCadastro) {
+        this.dataCadastro = dataCadastro;
+    }
 
     public Long getId(){
         return this.id;
